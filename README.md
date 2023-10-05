@@ -1,1 +1,4 @@
-# CSU11022 Project: 2390-sudoku
+My code is located in the "src" folder.
+
+This program was written as part of a first year computing assignment.
+It takes input in the from of a 9x9 array in memory.
