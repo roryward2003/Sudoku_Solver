@@ -1,13 +1,13 @@
 # ignore build directory
-# **/build
+**/build
 
 # ignore xpacks directory
-# **/xpacks
+**/xpacks
 
 # ignore .vscode
-# .vscode/**
+.vscode/**
 
 # but include some files from .vscode
-# !.vscode/launch.json
-# !.vscode/tasks.json
-# !.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/settings.json
