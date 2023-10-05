@@ -1,0 +1,303 @@
+   1              	# 0 "./src/sudoku.s"
+   2              	# 1 "C:\\Users\\roryw\\OneDrive\\Documents\\College\\ICS Year 1\\CSU11021 Intro to Computing\\2390-
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  countInRow
+   7              	  .global  countInCol
+   8              	  .global  countIn3x3
+   9              	  .global  nextInCell
+  10              	  .global  solveSudoku
+  11              	
+  12              	
+  13              	@ countInRow subroutine
+  14              	@ Count the number of occurrences of a specified value in one row of a Sudoku
+  15              	@   grid.
+  16              	@
+  17              	@ Parameters:
+  18              	@   R0: start address of 2D array representing the Sudoku grid
+  19              	@   R1: row number
+  20              	@   R2: value to count
+  21              	@ Return:
+  22              	@   R0: number of occurrences of value in specified row
+  23              	countInRow:
+  24 0000 2DE9F043 	  PUSH    {R4-R9, LR}             @ push registers
+  25 0004 0446     	  MOV     R4, R0                  @ startAddress
+  26 0006 0D46     	  MOV     R5, R1                  @ rowNumber
+  27 0008 1646     	  MOV     R6, R2                  @ valueToCount
+  28 000a 4FF00000 	  MOV     R0, #0
+  29              	
+  30 000e 4FF00907 	  MOV     R7, #9                  @ mulTemp
+  31 0012 05FB07F5 	  MUL     R5, R5, R7              @ array[rowNumber][n]
+  32              	.LFor1_1:
+  33 0016 002F     	  CMP     R7, #0                  @ while(i>0)
+  34 0018 0ADD     	  BLE     .LeFor1_1               @ {
+  35              	
+  36 001a 14F80580 	  LDRB    R8, [R4, R5]            @    temp = [rowNumber][n]
+  37 001e B045     	  CMP     R8, R6                  @    
+  38 0020 01D1     	  BNE     .LeIf1_1                @    if(temp==value)
+  39 0022 00F10100 	  ADD     R0, R0, #1              @       valueCount+=1
+  40              	.LeIf1_1:
+  41              	
+  42 0026 05F10105 	  ADD     R5, R5, #1              @    n+=1
+  43 002a A7F10107 	  SUB     R7, R7, #1              @    i-=1
+  44 002e F2E7     	  B       .LFor1_1                   @ }
+  45              	.LeFor1_1:
+  46              	
+  47 0030 BDE8F083 	  POP     {R4-R9, PC}             @ pop registers
+  48              	
+  49              	
+  50              	
+  51              	@ countInCol subroutine
+  52              	@ Count the number of occurrences of a specified value in one column of a Sudoku
+  53              	@   grid.
+  54              	@
+  55              	@ Parameters:
+  56              	@   R0: start address of 2D array representing the Sudoku grid
+  57              	@   R1: column number
+  58              	@   R2: value to count
+  59              	@ Return:
+  60              	@   R0: number of occurrences of value in specified column
+  61              	countInCol:
+  62 0034 2DE9F05F 	  PUSH    {R4-R12, LR}            @ push registers
+  63 0038 0446     	  MOV     R4, R0                  @ startAddress
+  64 003a 0D46     	  MOV     R5, R1                  @ colNumber
+  65 003c 1646     	  MOV     R6, R2                  @ valueToCount
+  66 003e 4FF00000 	  MOV     R0, #0
+  67              	
+  68 0042 4FF00907 	  MOV     R7, #9                  @ i = 9
+  69              	.LFor2_1:
+  70 0046 002F     	  CMP     R7, #0                  @ while(i>0)
+  71 0048 0ADD     	  BLE     .LeFor2_1               @ {
+  72              	
+  73 004a 14F80580 	  LDRB    R8, [R4, R5]            @    temp = [n][colNumber]
+  74 004e B045     	  CMP     R8, R6                  @    
+  75 0050 01D1     	  BNE     .LeIf2_1                @    if(temp==value)
+  76 0052 00F10100 	  ADD     R0, R0, #1              @       valueCount+=1
+  77              	.LeIf2_1:
+  78 0056 05F10905 	  ADD     R5, R5, #9              @    n+=9
+  79 005a A7F10107 	  SUB     R7, R7, #1              @    i-=1
+  80 005e F2E7     	  B       .LFor2_1                   @ }
+  81              	.LeFor2_1:
+  82              	
+  83 0060 BDE8F09F 	  POP     {R4-R12, PC}            @ pop registers
+  84              	
+  85              	
+  86              	
+  87              	@ countIn3x3 subroutine
+  88              	@ Count the number of occurrences of a specified value in one 3x3 subgrid
+  89              	@   of a Sudoku grid.
+  90              	@
+  91              	@ Parameters:
+  92              	@   R0: start address of 2D array representing the Sudoku grid
+  93              	@   R1: row number of any row in the 3x3 subgrid
+  94              	@   R2: column number of any column in the 3x3 subgrid
+  95              	@   R3: value to count
+  96              	@ Return:
+  97              	@   R0: number of occurrences of value in specified 3x3 subgrid
+  98              	countIn3x3:
+  99 0064 2DE9F05F 	  PUSH    {R4-R12, LR}
+ 100 0068 0446     	  MOV     R4, R0                  @ startAddress
+ 101 006a 4FF00308 	  MOV     R8, #3                  @ divTemp = 3
+ 102 006e B1FBF8F5 	  UDIV    R5, R1, R8              @ rowNumber/3
+ 103 0072 05FB08F5 	  MUL     R5, R5, R8              @ rowNumber*3
+ 104 0076 B2FBF8F6 	  UDIV    R6, R2, R8              @ colNumber/3
+ 105 007a 06FB08F6 	  MUL     R6, R6, R8              @ colNumber*3
+ 106 007e 1F46     	  MOV     R7, R3                  @ value
+ 107 0080 4FF0090B 	  MOV     R11, #9
+ 108 0084 4FF00000 	  MOV     R0, #0
+ 109              	
+ 110 0088 4FF00008 	  MOV     R8, #0                  @ for(int i=0; i<)
+ 111              	.LFor3_1:
+ 112 008c B8F1030F 	  CMP     R8, #3
+ 113 0090 15DA     	  BGE     .LeFor3_1
+ 114              	
+ 115 0092 4FF00009 	  MOV     R9, #0
+ 116              	.LFor3_2:
+ 117 0096 B9F1030F 	  CMP     R9, #3
+ 118 009a 0BDA     	  BGE     .LeFor3_2
+ 119              	
+ 120 009c 05FB0B6C 	  MLA     R12, R5, R11, R6        @ offset = (rowNumber*9) + colNumber
+ 121 00a0 CC44     	  ADD     R12, R12, R9            @ offset += n
+ 122              	
+ 123 00a2 14F80CA0 	  LDRB    R10, [R4, R12]
+ 124 00a6 BA45     	  CMP     R10, R7
+ 125 00a8 01D1     	  BNE     .LeIf3_1
+ 126 00aa 00F10100 	  ADD     R0, R0, #1
+ 127              	.LeIf3_1:
+ 128              	
+ 129 00ae 09F10109 	  ADD     R9, R9, #1
+ 130 00b2 F0E7     	  B       .LFor3_2
+ 131              	.LeFor3_2:
+ 132              	
+ 133 00b4 05F10105 	  ADD     R5, R5, #1
+ 134 00b8 08F10108 	  ADD     R8, R8, #1
+ 135 00bc E6E7     	  B       .LFor3_1
+ 136              	.LeFor3_1:
+ 137              	
+ 138 00be BDE8F09F 	  POP     {R4-R12, PC}
+ 139              	
+ 140              	
+ 141              	
+ 142              	@ nextInCell subroutine
+ 143              	@ Find the next higher valid value that can be placed in a specified cell in a
+ 144              	@   Sudoku grid.
+ 145              	@
+ 146              	@ Parameters:
+ 147              	@   R0: start address of 2D array representing the Sudoku grid
+ 148              	@   R1: row number of cell
+ 149              	@   R2: column number of cell
+ 150              	@ Return:
+ 151              	@   R0: next higher value or 0 if there is no valid higher value
+ 152              	nextInCell:
+ 153 00c2 2DE9F05F 	  PUSH    {R4-R12, LR}
+ 154 00c6 0446     	  MOV     R4, R0
+ 155 00c8 0D46     	  MOV     R5, R1
+ 156 00ca 1646     	  MOV     R6, R2
+ 157 00cc 4FF00907 	  MOV     R7, #9
+ 158              	
+ 159 00d0 05FB0768 	  MLA     R8, R5, R7, R6         @ offset
+ 160 00d4 14F80890 	  LDRB    R9, [R4, R8]           @ currentValue = [startAddress+offset]
+ 161              	
+ 162              	.LFor4_1:
+ 163 00d8 09F10109 	  ADD     R9, R9, #1             @ currentValue += 1
+ 164 00dc B9F10A0F 	  CMP     R9, #10
+ 165 00e0 02DB     	  BLT     .LeIf4_1
+ 166 00e2 4FF00000 	  MOV     R0, #0
+ 167 00e6 16E0     	  B       .LeFor4_1
+ 168              	.LeIf4_1:    
+ 169              	
+ 170 00e8 2046     	  MOV     R0, R4
+ 171 00ea 2946     	  MOV     R1, R5
+ 172 00ec 4A46     	  MOV     R2, R9
+ 173 00ee FFF7FEFF 	  BL      countInRow
+ 174 00f2 0128     	  CMP     R0, #1
+ 175 00f4 F0DA     	  BGE     .LFor4_1
+ 176              	
+ 177 00f6 2046     	  MOV     R0, R4
+ 178 00f8 3146     	  MOV     R1, R6
+ 179 00fa 4A46     	  MOV     R2, R9
+ 180 00fc FFF7FEFF 	  BL      countInCol
+ 181 0100 0128     	  CMP     R0, #1
+ 182 0102 E9DA     	  BGE     .LFor4_1
+ 183              	
+ 184 0104 2046     	  MOV     R0, R4
+ 185 0106 2946     	  MOV     R1, R5
+ 186 0108 3246     	  MOV     R2, R6
+ 187 010a 4B46     	  MOV     R3, R9
+ 188 010c FFF7FEFF 	  BL      countIn3x3
+ 189 0110 0128     	  CMP     R0, #1
+ 190 0112 E1DA     	  BGE     .LFor4_1
+ 191              	
+ 192 0114 4846     	  MOV     R0, R9
+ 193              	.LeFor4_1:
+ 194              	
+ 195 0116 BDE8F09F 	  POP     {R4-R12, PC}
+ 196              	
+ 197              	
+ 198              	
+ 199              	@ solveSudoku subroutine
+ 200              	@ Solve a Sudoku puzzle.
+ 201              	@
+ 202              	@ Parameters:
+ 203              	@   R0: start address of 2D array representing the Sudoku grid
+ 204              	@   R1: row number of next cell to modify
+ 205              	@   R2: column number of next cell to modify
+ 206              	@ Return:
+ 207              	@   R0: 1 if a solution was found, zero otherwise
+ 208              	solveSudoku:
+ 209 011a 2DE9F05F 	  PUSH    {R4-R12, LR}               @ push
+ 210 011e 0446     	  MOV     R4, R0                     @ startAddress
+ 211 0120 0D46     	  MOV     R5, R1                     @ row
+ 212 0122 1646     	  MOV     R6, R2                     @ col
+ 213 0124 4FF0090C 	  MOV     R12, #9                    @ mulTemp = 9
+ 214              	
+ 215              	.LIf5_1:
+ 216 0128 092D     	  CMP     R5, #9                     @ if(row >= 9)
+ 217 012a 04DB     	  BLT     .LElse5_1                  @    result = 1
+ 218 012c 4FF0010B 	  MOV     R11, #1                    @ 
+ 219 0130 4FF00100 	  MOV     R0, #1                     @    B end
+ 220 0134 3BE0     	  B       .LeElse5_1                 @ else
+ 221              	.LElse5_1:
+ 222 0136 4FF0000B 	  MOV     R11, #0                    @    result = 0
+ 223 013a 06F10108 	  ADD     R8, R6, #1                 @    nextCol = col+1
+ 224 013e 2F46     	  MOV     R7, R5                     @    nextRow = row
+ 225              	.LIf5_2:
+ 226 0140 B8F1090F 	  CMP     R8, #9                     @    if(nextCol >= 9)
+ 227 0144 03DB     	  BLT     .LeIf5_2                   @ 
+ 228 0146 4FF00008 	  MOV     R8, #0                     @       nextCol = 0
+ 229 014a 07F10107 	  ADD     R7, R7, #1                 @       nextRow += 1
+ 230              	.LeIf5_2:
+ 231              	
+ 232              	  // Get the value of the current cell
+ 233 014e 05FB0C69 	  MLA     R9, R5, R12, R6            @    currentIndex = (row*9)+col
+ 234 0152 14F809A0 	  LDRB    R10, [R4, R9]              @    current = [startAddress + currentIndex]
+ 235              	
+ 236 0156 4FF0000C 	  MOV     R12, #0                    @    nextOption = 0
+ 237              	
+ 238              	.LIf5_3:
+ 239 015a BAF1000F 	  CMP     R10, #0                    @    if(current != 0)
+ 240 015e 06D0     	  BEQ     .LElse5_3                  @       result = solveSudoku(startAddress, nextRow, nextCol)
+ 241 0160 2046     	  MOV     R0, R4                     @ 
+ 242 0162 3946     	  MOV     R1, R7                     @ 
+ 243 0164 4246     	  MOV     R2, R8                     @ 
+ 244 0166 FFF7FEFF 	  BL      solveSudoku                @
+ 245 016a 8346     	  MOV     R11, R0                    @    else
+ 246 016c 1FE0     	  B       .LeElse5_3
+ 247              	.LElse5_3:
+ 248 016e 2046     	  MOV     R0, R4                     @       nextOption = nextInCell(startAddress, row, col)
+ 249 0170 2946     	  MOV     R1, R5                     @ 
+ 250 0172 3246     	  MOV     R2, R6                     @ 
+ 251 0174 FFF7FEFF 	  BL      nextInCell                 @ 
+ 252 0178 8446     	  MOV     R12, R0                    @
+ 253              	
+ 254              	.LWhile5_1:
+ 255 017a BCF1000F 	  CMP     R12, #0                    @       while(nextOption!=0 && result!=1)
+ 256 017e 11D0     	  BEQ     .LeWhile5_1                @          
+ 257 0180 BBF1010F 	  CMP     R11, #1                    @ 
+ 258 0184 0ED0     	  BEQ     .LeWhile5_1                @ 
+ 259              	
+ 260 0186 04F809C0 	  STRB    R12, [R4, R9]              @          [startAddress + currentIndex] = nextOption
+ 261              	
+ 262 018a 2046     	  MOV     R0, R4                     @          result = solveSudoku(startAddress, nexRow, nextCol)
+ 263 018c 3946     	  MOV     R1, R7                     @          
+ 264 018e 4246     	  MOV     R2, R8                     @          
+ 265 0190 FFF7FEFF 	  BL      solveSudoku                @          
+ 266 0194 8346     	  MOV     R11, R0                    @          
+ 267              	
+ 268 0196 2046     	  MOV     R0, R4                     @          nextOption = nextInCell(startAddress, row, col)
+ 269 0198 2946     	  MOV     R1, R5                     @ 
+ 270 019a 3246     	  MOV     R2, R6                     @ 
+ 271 019c FFF7FEFF 	  BL      nextInCell                 @ 
+ 272 01a0 8446     	  MOV     R12, R0                    @ 
+ 273 01a2 EAE7     	  B       .LWhile5_1                 @ 
+ 274              	.LeWhile5_1:
+ 275              	
+ 276              	.LIf5_4:
+ 277 01a4 BBF1000F 	  CMP     R11, #0                    @       if(result == 0)
+ 278 01a8 01D1     	  BNE     .LeIf5_4                   @ 
+ 279 01aa 04F809B0 	  STRB    R11, [R4, R9]              @          [startAddress + currentIndex] = 0
+ 280              	
+ 281              	.LeIf5_4:
+ 282              	.LeElse5_3:
+ 283              	.LeElse5_1:
+ 284              	
+ 285 01ae 5846     	  MOV     R0, R11
+ 286              	
+ 287 01b0 BDE8F09F 	  POP     {R4-R12, PC}
+ 288              	
+ 289              	  .end...
+DEFINED SYMBOLS
+      ./src/sudoku.s:23     .text:0000000000000000 countInRow
+      ./src/sudoku.s:61     .text:0000000000000034 countInCol
+      ./src/sudoku.s:98     .text:0000000000000064 countIn3x3
+      ./src/sudoku.s:152    .text:00000000000000c2 nextInCell
+      ./src/sudoku.s:208    .text:000000000000011a solveSudoku
+      ./src/sudoku.s:24     .text:0000000000000000 $t
+
+NO UNDEFINED SYMBOLS

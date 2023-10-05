@@ -1,0 +1,256 @@
+
+Discarded input sections
+
+ .bss           0x0000000000000000        0x0 build/startup_stm32f100xb.o
+ .bss           0x0000000000000000        0x0 build/sudoku.o
+ .bss           0x0000000000000000        0x0 build/test.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+RAM              0x0000000020000000 0x0000000000002000 xrw
+FLASH            0x0000000008000000 0x0000000000020000 xr
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD build/startup_stm32f100xb.o
+LOAD build/sudoku.o
+LOAD build/test.o
+LOAD c:/users/roryw/appdata/roaming/xpacks/@xpack-dev-tools/arm-none-eabi-gcc/11.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/11.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libc.a
+LOAD c:/users/roryw/appdata/roaming/xpacks/@xpack-dev-tools/arm-none-eabi-gcc/11.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/11.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libm.a
+LOAD c:/users/roryw/appdata/roaming/xpacks/@xpack-dev-tools/arm-none-eabi-gcc/11.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/11.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a
+                0x0000000020002000                _estack = (ORIGIN (RAM) + LENGTH (RAM))
+                0x0000000000000400                _Min_Stack_Size = 0x400
+
+.isr_vector     0x0000000008000000      0x1d0
+ *(.isr_vector)
+ .isr_vector    0x0000000008000000      0x1d0 build/startup_stm32f100xb.o
+
+.text           0x00000000080001d0      0x264
+ *(.text*)
+ .text          0x00000000080001d0       0x90 build/startup_stm32f100xb.o
+                0x00000000080001d0                Reset_Handler
+                0x0000000008000248                Init_Test
+ .text.Default_Handler
+                0x0000000008000260        0x2 build/startup_stm32f100xb.o
+                0x0000000008000260                RTC_Alarm_IRQHandler
+                0x0000000008000260                EXTI2_IRQHandler
+                0x0000000008000260                DebugMon_Handler
+                0x0000000008000260                TIM1_CC_IRQHandler
+                0x0000000008000260                HardFault_Handler
+                0x0000000008000260                SysTick_Handler
+                0x0000000008000260                PVD_IRQHandler
+                0x0000000008000260                PendSV_Handler
+                0x0000000008000260                NMI_Handler
+                0x0000000008000260                EXTI3_IRQHandler
+                0x0000000008000260                EXTI0_IRQHandler
+                0x0000000008000260                TIM1_UP_TIM16_IRQHandler
+                0x0000000008000260                UsageFault_Handler
+                0x0000000008000260                SPI1_IRQHandler
+                0x0000000008000260                TAMPER_IRQHandler
+                0x0000000008000260                TIM6_DAC_IRQHandler
+                0x0000000008000260                DMA1_Channel4_IRQHandler
+                0x0000000008000260                ADC1_IRQHandler
+                0x0000000008000260                USART3_IRQHandler
+                0x0000000008000260                RTC_IRQHandler
+                0x0000000008000260                DMA1_Channel7_IRQHandler
+                0x0000000008000260                TIM4_IRQHandler
+                0x0000000008000260                I2C1_EV_IRQHandler
+                0x0000000008000260                DMA1_Channel6_IRQHandler
+                0x0000000008000260                TIM3_IRQHandler
+                0x0000000008000260                RCC_IRQHandler
+                0x0000000008000260                DMA1_Channel1_IRQHandler
+                0x0000000008000260                Default_Handler
+                0x0000000008000260                CEC_IRQHandler
+                0x0000000008000260                EXTI15_10_IRQHandler
+                0x0000000008000260                TIM7_IRQHandler
+                0x0000000008000260                EXTI9_5_IRQHandler
+                0x0000000008000260                MemManage_Handler
+                0x0000000008000260                SVC_Handler
+                0x0000000008000260                DMA1_Channel5_IRQHandler
+                0x0000000008000260                EXTI4_IRQHandler
+                0x0000000008000260                TIM1_TRG_COM_TIM17_IRQHandler
+                0x0000000008000260                DMA1_Channel3_IRQHandler
+                0x0000000008000260                WWDG_IRQHandler
+                0x0000000008000260                TIM2_IRQHandler
+                0x0000000008000260                EXTI1_IRQHandler
+                0x0000000008000260                USART2_IRQHandler
+                0x0000000008000260                DMA1_Channel2_IRQHandler
+                0x0000000008000260                FLASH_IRQHandler
+                0x0000000008000260                BusFault_Handler
+                0x0000000008000260                USART1_IRQHandler
+                0x0000000008000260                I2C1_ER_IRQHandler
+                0x0000000008000260                TIM1_BRK_TIM15_IRQHandler
+ .text          0x0000000008000262      0x1b4 build/sudoku.o
+                0x0000000008000262                countInRow
+                0x0000000008000296                countInCol
+                0x00000000080002c6                countIn3x3
+                0x0000000008000324                nextInCell
+                0x000000000800037c                solveSudoku
+ *fill*         0x0000000008000416        0x2 
+ .text          0x0000000008000418       0x1c build/test.o
+                0x0000000008000418                Main
+
+.glue_7         0x0000000008000434        0x0
+ .glue_7        0x0000000008000434        0x0 linker stubs
+
+.glue_7t        0x0000000008000434        0x0
+ .glue_7t       0x0000000008000434        0x0 linker stubs
+
+.vfp11_veneer   0x0000000008000434        0x0
+ .vfp11_veneer  0x0000000008000434        0x0 linker stubs
+
+.v4_bx          0x0000000008000434        0x0
+ .v4_bx         0x0000000008000434        0x0 linker stubs
+
+.iplt           0x0000000008000434        0x0
+ .iplt          0x0000000008000434        0x0 build/startup_stm32f100xb.o
+
+.rel.dyn        0x0000000008000434        0x0
+ .rel.iplt      0x0000000008000434        0x0 build/startup_stm32f100xb.o
+
+.rodata         0x0000000008000434        0x0
+                0x0000000008000434                . = ALIGN (0x4)
+ *(.rodata*)
+
+.bss            0x0000000020000000        0x0
+                0x0000000020000000                . = ALIGN (0x4)
+                0x0000000020000000                _sbss = .
+ *(.bss .bss.*)
+ *(COMMON)
+                0x0000000020000000                _ebss = .
+
+.data           0x0000000020000000       0x54 load address 0x0000000008000434
+                0x0000000008000434                _load_address = LOADADDR (.data)
+                0x0000000020000000                . = ALIGN (0x4)
+                0x0000000020000000                _sdata = .
+ *(.data.test)
+ .data.test     0x0000000020000000       0x51 build/test.o
+                0x0000000020000000                testGrid
+                0x0000000020000054                . = ALIGN (0x4)
+ *fill*         0x0000000020000051        0x3 
+ *(.data*)
+ .data          0x0000000020000054        0x0 build/startup_stm32f100xb.o
+ .data          0x0000000020000054        0x0 build/sudoku.o
+ .data          0x0000000020000054        0x0 build/test.o
+                0x0000000020000054                _edata = .
+OUTPUT(build/firmware.elf elf32-littlearm)
+LOAD linker stubs
+
+.igot.plt       0x0000000020000054        0x0 load address 0x0000000008000488
+ .igot.plt      0x0000000020000054        0x0 build/startup_stm32f100xb.o
+
+.ARM.attributes
+                0x0000000000000000       0x21
+ .ARM.attributes
+                0x0000000000000000       0x21 build/startup_stm32f100xb.o
+ .ARM.attributes
+                0x0000000000000021       0x21 build/sudoku.o
+ .ARM.attributes
+                0x0000000000000042       0x21 build/test.o
+
+.debug_line     0x0000000000000000      0x1af
+ .debug_line    0x0000000000000000       0x8f build/startup_stm32f100xb.o
+ .debug_line    0x000000000000008f       0xd9 build/sudoku.o
+ .debug_line    0x0000000000000168       0x47 build/test.o
+
+.debug_info     0x0000000000000000       0x6e
+ .debug_info    0x0000000000000000       0x22 build/startup_stm32f100xb.o
+ .debug_info    0x0000000000000022       0x26 build/sudoku.o
+ .debug_info    0x0000000000000048       0x26 build/test.o
+
+.debug_abbrev   0x0000000000000000       0x3a
+ .debug_abbrev  0x0000000000000000       0x12 build/startup_stm32f100xb.o
+ .debug_abbrev  0x0000000000000012       0x14 build/sudoku.o
+ .debug_abbrev  0x0000000000000026       0x14 build/test.o
+
+.debug_aranges  0x0000000000000000       0x68
+ .debug_aranges
+                0x0000000000000000       0x28 build/startup_stm32f100xb.o
+ .debug_aranges
+                0x0000000000000028       0x20 build/sudoku.o
+ .debug_aranges
+                0x0000000000000048       0x20 build/test.o
+
+.debug_str      0x0000000000000000       0xa8
+ .debug_str     0x0000000000000000       0x8c build/startup_stm32f100xb.o
+ .debug_str     0x000000000000008c        0xf build/sudoku.o
+                                         0x7b (size before relaxing)
+ .debug_str     0x000000000000009b        0xd build/test.o
+                                         0x79 (size before relaxing)
+
+.debug_ranges   0x0000000000000000       0x20
+ .debug_ranges  0x0000000000000000       0x20 build/startup_stm32f100xb.o
+
+Cross Reference Table
+
+Symbol                                            File
+ADC1_IRQHandler                                   build/startup_stm32f100xb.o
+BusFault_Handler                                  build/startup_stm32f100xb.o
+CEC_IRQHandler                                    build/startup_stm32f100xb.o
+DMA1_Channel1_IRQHandler                          build/startup_stm32f100xb.o
+DMA1_Channel2_IRQHandler                          build/startup_stm32f100xb.o
+DMA1_Channel3_IRQHandler                          build/startup_stm32f100xb.o
+DMA1_Channel4_IRQHandler                          build/startup_stm32f100xb.o
+DMA1_Channel5_IRQHandler                          build/startup_stm32f100xb.o
+DMA1_Channel6_IRQHandler                          build/startup_stm32f100xb.o
+DMA1_Channel7_IRQHandler                          build/startup_stm32f100xb.o
+DebugMon_Handler                                  build/startup_stm32f100xb.o
+Default_Handler                                   build/startup_stm32f100xb.o
+EXTI0_IRQHandler                                  build/startup_stm32f100xb.o
+EXTI15_10_IRQHandler                              build/startup_stm32f100xb.o
+EXTI1_IRQHandler                                  build/startup_stm32f100xb.o
+EXTI2_IRQHandler                                  build/startup_stm32f100xb.o
+EXTI3_IRQHandler                                  build/startup_stm32f100xb.o
+EXTI4_IRQHandler                                  build/startup_stm32f100xb.o
+EXTI9_5_IRQHandler                                build/startup_stm32f100xb.o
+FLASH_IRQHandler                                  build/startup_stm32f100xb.o
+HardFault_Handler                                 build/startup_stm32f100xb.o
+I2C1_ER_IRQHandler                                build/startup_stm32f100xb.o
+I2C1_EV_IRQHandler                                build/startup_stm32f100xb.o
+I2C2_ER_IRQHandler                                build/startup_stm32f100xb.o
+I2C2_EV_IRQHandler                                build/startup_stm32f100xb.o
+Init_Test                                         build/startup_stm32f100xb.o
+                                                  build/test.o
+Main                                              build/test.o
+                                                  build/startup_stm32f100xb.o
+MemManage_Handler                                 build/startup_stm32f100xb.o
+NMI_Handler                                       build/startup_stm32f100xb.o
+PVD_IRQHandler                                    build/startup_stm32f100xb.o
+PendSV_Handler                                    build/startup_stm32f100xb.o
+RCC_IRQHandler                                    build/startup_stm32f100xb.o
+RTC_Alarm_IRQHandler                              build/startup_stm32f100xb.o
+RTC_IRQHandler                                    build/startup_stm32f100xb.o
+Reset_Handler                                     build/startup_stm32f100xb.o
+SPI1_IRQHandler                                   build/startup_stm32f100xb.o
+SVC_Handler                                       build/startup_stm32f100xb.o
+SysTick_Handler                                   build/startup_stm32f100xb.o
+TAMPER_IRQHandler                                 build/startup_stm32f100xb.o
+TIM1_BRK_TIM15_IRQHandler                         build/startup_stm32f100xb.o
+TIM1_CC_IRQHandler                                build/startup_stm32f100xb.o
+TIM1_TRG_COM_TIM17_IRQHandler                     build/startup_stm32f100xb.o
+TIM1_UP_TIM16_IRQHandler                          build/startup_stm32f100xb.o
+TIM2_IRQHandler                                   build/startup_stm32f100xb.o
+TIM3_IRQHandler                                   build/startup_stm32f100xb.o
+TIM4_IRQHandler                                   build/startup_stm32f100xb.o
+TIM6_DAC_IRQHandler                               build/startup_stm32f100xb.o
+TIM7_IRQHandler                                   build/startup_stm32f100xb.o
+USART1_IRQHandler                                 build/startup_stm32f100xb.o
+USART2_IRQHandler                                 build/startup_stm32f100xb.o
+USART3_IRQHandler                                 build/startup_stm32f100xb.o
+UsageFault_Handler                                build/startup_stm32f100xb.o
+WWDG_IRQHandler                                   build/startup_stm32f100xb.o
+_ebss                                             build/startup_stm32f100xb.o
+_edata                                            build/startup_stm32f100xb.o
+_estack                                           build/startup_stm32f100xb.o
+_load_address                                     build/startup_stm32f100xb.o
+_sbss                                             build/startup_stm32f100xb.o
+_sdata                                            build/startup_stm32f100xb.o
+countIn3x3                                        build/sudoku.o
+countInCol                                        build/sudoku.o
+countInRow                                        build/sudoku.o
+nextInCell                                        build/sudoku.o
+solveSudoku                                       build/sudoku.o
+                                                  build/test.o
+testGrid                                          build/test.o
