@@ -1,0 +1,37 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "cortex-debug",
+            "request": "launch",
+            "name": "Emulate ARM Cortex-M3 Program",
+            "cwd": "${workspaceFolder}",
+            "executable": "./build/firmware.elf",
+            "servertype":"qemu",
+            "cpu": "cortex-m3",
+            "machine": "stm32vldiscovery",
+            "serverpath": "xpacks/.bin/qemu-system-arm",
+            "windows":{
+                "serverpath": "xpacks\\.bin\\qemu-system-arm.cmd",
+                "postDebugTask": "windowsKillQemuSystemArm"
+            },
+            "postStartSessionCommands": ["tbreak Main", "break End_Main", "continue"]
+        },
+        {
+            "type": "cortex-debug",
+            "request": "launch",
+            "name": "[SCSS Windows PC Fix] Emulate ARM Cortex-M3 Program",
+            "cwd": "${workspaceFolder}",
+            "executable": "./build/firmware.elf",
+            "servertype":"qemu",
+            "cpu": "cortex-m3",
+            "machine": "stm32vldiscovery",
+            "serverpath": "xpacks/.bin/qemu-system-arm",
+            "windows":{
+                "serverpath": "${workspaceFolder}\\xpacks\\.bin\\qemu-system-arm.cmd",
+                "postDebugTask": "windowsKillQemuSystemArm"
+            },
+            "postStartSessionCommands": ["break Main", "break End_Main", "continue"]
+        }
+    ]
+}
