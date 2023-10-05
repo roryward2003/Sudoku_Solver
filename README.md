@@ -1,2 +1,1 @@
-# Sudoku_Solver
-An ARM Assembly language program that solves any sudoku grid
+# CSU11022 Project: 2390-sudoku
